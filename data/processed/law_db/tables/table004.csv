@@ -1,0 +1,30 @@
+﻿TT,Mô tả  biển chỉ dẫn,Kiểu  chữ,"Màu chữ,  số",Màu nền,Màu viền
+1,Ký hiệu đường cao tốc,gt2,đen,vàng huỳnh  quang,đen
+2,"Ký hiệu quốc lộ, đường tỉnh, đường  huyện",gt2,đen,trắng,đen
+3,"Biển số IE.450 (a,b) chỉ dẫn sơ đồ, khoảng cách đến  nút giao  với đường dẫn vào đường cao tốc",gt2,trắng,xanh lam,Trắng
+4,"Biển số IE.451 (a,b) chỉ dẫn lối vào, khoảng  cách đến  lối vào  đường cao tốc",gt2,trắng,xanh lam,trắng
+5,Biển số IE.452 chỉ dẫn bắt đầu đường cao tốc,gt2,trắng,xanh lá cây,trắng
+6,"Biển số IE.453 (a,b) chỉ dẫn điểm kết thúc, khoảng  cách đến  điểm kết thúc  đường cao tốc",gt2,trắng,xanh lá cây,trắng
+7,Biển số IE.454 chỉ dẫn khoảng cách đến  lối ra phía  trước,gt2,trắng,xanh lá cây,trắng
+8,"Biển số IE.455 (a,b) chỉ dẫn khoảng cách đến  các lối  ra tiếp theo",gt2,trắng,xanh lá cây,trắng
+9,"Biển số IE.456 (a,b,c) chỉ dẫn khoảng cách, hướng  rẽ đến trạm dừng nghỉ",gt2,trắng,xanh lá cây,trắng
+10,"Biển số IE.457 (a,b) chỉ dẫn nơi đỗ xe trong  trạm dừng nghỉ",gt2,trắng,xanh lá cây,trắng
+11,Biển số IE.458 chỉ dẫn khoảng cách đến  các trạm  dừng nghỉ tiếp theo,gt2,trắng,xanh lá cây,trắng
+12,"Biển số IE.459 (a,b) chỉ dẫn khoảng cách đến  khu tham quan, du lịch",gt2,trắng,xanh lá cây,trắng
+13,Biển số IE.460 chỉ dẫn cột lý trình kilômét,gt2,trắng,xanh lá cây,trắng
+14,"Biển số IE.461 (a,b,c) chỉ dẫn khoảng cách đến  khu dịch vụ công  cộng, giải trí",gt2,trắng,xanh lá cây,trắng
+15,Biển số IE.461d chỉ dẫn hướng rẽ vào khu giải  trí,gt2,trắng,nâu,trắng
+16,Biển số IE.462 chỉ dẫn tần số trên sóng radio,gt2,trắng,xanh lá cây,trắng
+17,"Biển số IE.463 (a,b,c) chỉ dẫn khoảng cách, hướng  rẽ vào  Công trình kiểm soát tải trọng xe",gt2,trắng,xanh lá cây,trắng
+18,"Biển số IE.464 (a,b) chỉ dẫn địa điểm và phương hướng",gt2,trắng,xanh lá cây,trắng
+19,"Biển số IE.465 (a,b) chỉ dẫn địa điểm và khoảng  cách",gt2,trắng,xanh lá cây,trắng
+20,Biển số IE.466 chỉ dẫn sơ đồ lối ra một chiều,gt2,trắng,xanh lá cây,trắng
+21,"Biển số IE.467 (a,b) chỉ dẫn vị trí nhập  làn, khoảng  cách đến  vị trí  nhập làn",gt2,trắng,xanh lá cây,trắng
+22,"Biển số IE.468 (a,b,c) chỉ dẫn chướng ngại vật  phía trước",-,-,vàng huỳnh  quang,đen
+23,Biển số IE.469 chỉ dẫn hướng rẽ,-,-,vàng huỳnh  quang,đen
+24,Biển số IE.470 chỉ dẫn số điện thoại khẩn cấp,gt2,trắng,xanh lá cây,trắng
+25,Biển số IE.471 chỉ dẫn giữ khoảng cách lái xe an toàn,gt2,đen,vàng huỳnh  quang,đen
+26,"Biển số IE.472 (a,b,c,d,e) chỉ dẫn khoảng cách đến  trạm thu phí,  trạm thu phí, thu phí không dừng, rút thẻ,  thu phí",gt2,trắng,xanh lá cây,trắng
+27,Biển số IE.473 chỉ dẫn giảm tốc độ,gt2,đen,vàng huỳnh  quang,đen
+28,Biển số IE.474 chỉ dẫn lối ra,gt2,trắng,xanh lá cây,trắng
+29,"Các biển chỉ dẫn khác: biển  chỉ dẫn địa danh; địa phận hành chính cấp tỉnh, thành phố;  biển tên  cầu, tên  công trình lớn. (Thiết kế chi tiết các biển chỉ dẫn  khác có  thể vận dụng các quy định về biển chỉ dẫn cho đường ô tô không phải  là đường  cao tốc ngoại trừ các quy định nêu trong Bảng này)",gt2,trắng,xanh lá cây,trắng

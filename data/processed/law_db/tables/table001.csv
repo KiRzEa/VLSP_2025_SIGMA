@@ -1,0 +1,11 @@
+﻿Loại  biển,Kích thước,Độ  lớn
+Biển  tròn,"Đường kính ngoài của biển báo, D",700
+Biển  tròn,"Chiều rộng của mép viền đỏ, B",100
+Biển  tròn,"Chiều rộng của vạch đỏ, A",50
+Biển  bát giác,"Đường kính ngoài biển  báo, D",600
+Biển  bát giác,"Độ rộng viền trắng xung quanh, B",30
+Biển  tam giác,"Chiều dài cạnh của hình tam giác, L",700
+Biển  tam giác,"Chiều rộng của viền mép đỏ, B",50
+Biển  tam giác,"Bán kính lượn tròn của viền mép đỏ,  R",35
+Biển  tam giác,"Khoảng cách đỉnh cung tròn đến  đỉnh tam giác  cơ bản, C",30
+"Biển  vuông,  chữ nhật","Khoảng cách đỉnh cung tròn đến  đỉnh chữ nhật cơ bản, C",20-30

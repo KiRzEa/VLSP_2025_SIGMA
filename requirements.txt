@@ -1,0 +1,12 @@
+python-dotenv
+pandas
+pillow
+lxml
+html5lib
+beautifulsoup4
+torch
+transformers 
+open-clip-torch
+langchain
+langchain-openai
+langchain-azure-ai

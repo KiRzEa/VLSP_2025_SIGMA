@@ -1,3 +1,5 @@
-ipykernel=6.30.0
-python-dotenv=1.1.1
-azure-ai-inference=1.0.0b9
+ipykernel==6.30.0
+python-dotenv==1.1.1
+azure-ai-inference==1.0.0b9
+openai==1.97.1
+pillow==11.3.0

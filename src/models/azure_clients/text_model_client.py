@@ -4,7 +4,7 @@ from azure.ai.inference import ChatCompletionsClient
 from azure.ai.inference.models import SystemMessage, UserMessage
 from azure.core.credentials import AzureKeyCredential
 
-from src.azure_clients.base_client import BaseChatModelClient
+from src.models.base_client import BaseChatModelClient
 
 AZURE_API_KEY = os.environ.get("AZURE_API_KEY")
 AZURE_ENDPOINT = os.environ.get("AZURE_ENDPOINT")

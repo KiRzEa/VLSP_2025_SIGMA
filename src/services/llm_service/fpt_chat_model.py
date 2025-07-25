@@ -1,6 +1,6 @@
 from langchain_openai import ChatOpenAI
 from src.services.llm_service.base import BaseChatModel
-from src.core.config import Settings
+from src.core.config import Settings, settings
 
 
 class FPTChatModel(BaseChatModel):
@@ -10,8 +10,8 @@ class FPTChatModel(BaseChatModel):
 
     def __init__(
         self,
-        settings: Settings,
         model_name: str = "Qwen2.5-VL-7B-Instruct",
+        settings: Settings = settings,
         temperature: float = 0.9,
         max_tokens: int = 2048,
         max_retries: int = 3

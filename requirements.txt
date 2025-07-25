@@ -1,10 +1,11 @@
+<<<<<<< HEAD
 ipykernel==6.30.0
 python-dotenv==1.1.1
 azure-ai-inference==1.0.0b9
 openai==1.97.1
-pillow==11.3.0python-dotenv
+pillow==11.3.0
+=======
 pandas
-pillow
 lxml
 html5lib
 beautifulsoup4
@@ -14,3 +15,5 @@ open-clip-torch
 langchain
 langchain-openai
 langchain-azure-ai
+>>>>>>> origin/long/dev
+                                         

@@ -1,6 +1,6 @@
 from langchain_azure_ai.chat_models import AzureAIChatCompletionsModel
 from src.services.llm_service.base import BaseChatModel
-from src.core.config import Settings
+from src.core.config import Settings, settings
 
 
 class AzureChatModel(BaseChatModel):
@@ -10,8 +10,8 @@ class AzureChatModel(BaseChatModel):
 
     def __init__(
         self,
-        settings: Settings,
         model_name: str = "DeepSeek-R1-0528",
+        settings: Settings = settings,
         temperature: float = 0.9,
         max_tokens: int = 2048,
         max_retries: int = 3

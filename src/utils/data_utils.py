@@ -38,7 +38,7 @@ def load_table(table_path: str) -> Any:
         return None
 
 def load_law_db() -> Tuple[dict, dict]:
-    law_db_path = os.path.join(DATA_DIR, "law_db", "vlsp2025.json")
+    law_db_path = os.path.join(DATA_DIR, "law_db", "vlsp2025_law.json")
     law_db_data = load_json(law_db_path)
     traffic_sign_standard = law_db_data[0]
     traffic_order_safety_law = law_db_data[1]

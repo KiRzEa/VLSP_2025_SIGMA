@@ -1,2 +1,4 @@
-from src.models.azure_clients import AzureTextModelClient
-from src.models.fpt_clients import FPTMultimodalModelClient
+from src.models.article import (
+    Article,
+    ArticleState,
+)

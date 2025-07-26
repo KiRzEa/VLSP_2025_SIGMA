@@ -1,10 +1,14 @@
 import re
+import json
 import base64
-from typing import List, Dict, Tuple, Optional
 import requests
-from io import BytesIO
 from PIL import Image
+from io import BytesIO
+from typing import List, Dict, Tuple
 
+from langchain_core.messages import BaseMessage
+
+from src.models.article import Article
 
 def extract_images_and_tables(text: str) -> Dict[str, List[str]]:
     """
@@ -74,3 +78,39 @@ def encode_image_content_from_url(
             img = resize_image(img, size)
             return encode_image_from_pil(img, "PNG")
     return base64.b64encode(response.content).decode("utf-8")
+
+def extract_json_from_deepseek_response(response: BaseMessage, return_json=False) -> dict:
+    """
+    Extract and parse the JSON content from a DeepSeek model response.
+
+    Args:
+        response (BaseMessage): The output message returned by the DeepSeek model.
+
+    Returns:
+        dict: A parsed JSON dictionary from the content following the </think> tag.
+
+    """
+    content = response.content.replace("json", "").replace("```", "").strip()
+
+    # Attempt to find the content after </think>
+    if "</think>" in content:
+        json_str = content.split("</think>", maxsplit=1)[-1].strip()
+    else:
+        # If <think> tags are not present, assume entire content is JSON
+        json_str = content
+
+    try:
+        return json.loads(json_str) if return_json else json_str
+    except json.JSONDecodeError as e:
+        raise ValueError(f"Failed to parse JSON from DeepSeek response: {e}\nRaw content: {json_str}")
+    
+
+### PROMPT INPUT FORMAT
+def format_choices(choices: Dict) -> str:
+    return "\n".join(f"- {key}. {value}" for key, value in choices.items())
+
+
+def get_article_text(articles: List[Article], index: int) -> str:
+    article = articles[index]
+    return f"Tiêu đề: {article.title}\nNội dung: {article.text}"
+

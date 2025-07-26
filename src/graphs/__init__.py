@@ -1,0 +1,1 @@
+from src.graphs.article_subgraph import ArticleAnalysisSubgraph

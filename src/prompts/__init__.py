@@ -1,0 +1,1 @@
+from src.prompts.article_analysis_prompts import CHECK_ARTICLE_RELEVANCY_PROMPT

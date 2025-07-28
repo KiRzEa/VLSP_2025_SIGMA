@@ -34,6 +34,13 @@ class BaseChatModel(ABC):
         """
         if self.client is None:
             self._connect()
+    
+    def get_client(self):
+        """
+        Get the LLM Client
+        """
+        self.ensure_connection()
+        return self.client
 
     def generate(
         self,

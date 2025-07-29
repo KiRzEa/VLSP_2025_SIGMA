@@ -1,7 +1,9 @@
-import requests
+import os
 import base64
+import requests
 from abc import ABC, abstractmethod
 
+ROBOFLOW_API_KEY = os.environ.get("ROBOFLOW_API_KEY")
 # ===============================
 # BaseDetector Interface
 # ===============================
@@ -16,8 +18,8 @@ class BaseDetector(ABC):
 # Roboflow-based Detector
 # ===============================
 class RoboflowDetector(BaseDetector):
-    def __init__(self, api_key: str, model_name: str = "vlsp2025-trafficsign", version: int = 1):
-        self.api_key = api_key
+    def __init__(self, model_name: str = "vlsp2025-trafficsign", version: int = 1):
+        self.api_key = ROBOFLOW_API_KEY
         self.model_name = model_name
         self.version = version
 

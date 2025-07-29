@@ -1,5 +1,6 @@
 import os
-from PIL import Image
+from PIL import Image, ImageDraw
+import matplotlib.pyplot as plt
 
 def crop_item(image_path: str, prediction: dict):
     """
@@ -24,3 +25,54 @@ def save_crop(cropped_img: Image.Image, save_path: str):
     """
     os.makedirs(os.path.dirname(save_path), exist_ok=True)
     cropped_img.save(save_path)
+
+def plot_prediction_boxes(image_path: str, predictions: list):
+    """
+    Hiển thị ảnh gốc kèm các bounding boxes từ predictions.
+
+    Args:
+        image_path (str): Đường dẫn ảnh gốc
+        predictions (list): Danh sách các dự đoán từ detector
+    """
+    image = Image.open(image_path).convert("RGB")
+    draw = ImageDraw.Draw(image)
+
+    for pred in predictions:
+        x, y = pred["x"], pred["y"]
+        w, h = pred["width"], pred["height"]
+        label = pred.get("class", "")
+
+        x0 = x - w / 2
+        y0 = y - h / 2
+        x1 = x + w / 2
+        y1 = y + h / 2
+
+        draw.rectangle([x0, y0, x1, y1], outline="red", width=3)
+        draw.text((x0, y0 - 10), label, fill="red")
+
+    # Show using matplotlib
+    plt.figure(figsize=(8, 8))
+    plt.imshow(image)
+    plt.axis("off")
+    plt.title("Predictions")
+    plt.show()
+
+def show_image(image, title=None):
+    """
+    Hiển thị 1 ảnh đơn lẻ (PIL hoặc numpy)
+
+    Args:
+        image: PIL.Image hoặc np.ndarray
+        title (str, optional): tiêu đề ảnh (nếu có)
+    """
+    if isinstance(image, Image.Image):
+        img = np.array(image)
+    else:
+        img = image
+
+    plt.figure(figsize=(6, 6))
+    plt.imshow(img)
+    plt.axis("off")
+    if title:
+        plt.title(title)
+    plt.show()

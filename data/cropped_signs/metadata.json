@@ -1,0 +1,50 @@
+[
+  {
+    "original_image": "train_1_1.jpg",
+    "crop_id": "train_1_1_0.jpg",
+    "bbox": [
+      278,
+      235,
+      302,
+      258
+    ],
+    "label": "prohibition",
+    "image_path": "data/cropped_signs/images/train_1_1_0.jpg"
+  },
+  {
+    "original_image": "train_1_1.jpg",
+    "crop_id": "train_1_1_1.jpg",
+    "bbox": [
+      278,
+      260,
+      301,
+      281
+    ],
+    "label": "prohibition",
+    "image_path": "data/cropped_signs/images/train_1_1_1.jpg"
+  },
+  {
+    "original_image": "train_1_1.jpg",
+    "crop_id": "train_1_1_2.jpg",
+    "bbox": [
+      467,
+      5,
+      621,
+      137
+    ],
+    "label": "warning",
+    "image_path": "data/cropped_signs/images/train_1_1_2.jpg"
+  },
+  {
+    "original_image": "train_1_1.jpg",
+    "crop_id": "train_1_1_3.jpg",
+    "bbox": [
+      431,
+      135,
+      500,
+      201
+    ],
+    "label": "prohibition",
+    "image_path": "data/cropped_signs/images/train_1_1_3.jpg"
+  }
+]

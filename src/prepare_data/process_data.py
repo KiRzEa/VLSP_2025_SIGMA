@@ -60,3 +60,5 @@ if __name__ == "__main__":
     
     with open(os.path.join(DATA_DIR, "processed", "law_db", "articles", "traffic_order_safety_law.json"), "w", encoding="utf-8") as f:
         json.dump(traffic_order_safety_law_articles, f, ensure_ascii=False, indent=4)
+
+    

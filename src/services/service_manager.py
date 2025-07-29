@@ -10,10 +10,10 @@ class Service:
 
     def _initialize_services(self):
         # LLM
-        self.deepseek = AzureChatModel(model_name="DeepSeek-R1-0528").get_client()
+        self.deepseek = AzureChatModel(model_name="DeepSeek-R1-0528")
 
         # VLM
-        self.gemma = FPTChatModel(model_name="gemma-3-27b-it").get_client()
+        self.gemma = FPTChatModel(model_name="gemma-3-27b-it")
         self.qwen = FPTChatModel(model_name="Qwen2.5-VL-7B-Instruct")
         self.llama = FPTChatModel(model_name="Llama-4-Scout-17B-16E")
 

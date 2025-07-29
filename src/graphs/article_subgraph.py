@@ -22,9 +22,12 @@ class ArticleAnalysisSubgraph(BaseGraph):
         self.llm = llm
         self.graph: StateGraph = None
     
-    def no_more_articles(self, state: ArticleState) -> bool:
-        return state.current_index >= len(state.articles)
+    def all_articles_checked(self, state: ArticleState) -> bool:
+        return state.current_article_index >= len(state.articles)
 
+    def all_relevant_articles_filtered(self, state: ArticleState) -> bool:
+        return state.current_relevant_index >= len(state.relevant_articles)
+    
     def article_is_relevant(self, state: ArticleState) -> bool:
         try:
             last_msg = state.messages[-1].content
@@ -35,33 +38,39 @@ class ArticleAnalysisSubgraph(BaseGraph):
             return False
         
     def check_next_article(self, state: ArticleState):
-        if self.no_more_articles(state):
-            logger.info("[check_next_article] No more articles. Ending subgraph.")
+        if self.all_articles_checked(state):
+            logger.info("[check_next_article] No more articles. Start filtering information from relevant articles.")
         else:
-            logger.info(f"[check_next_article] Moving to article index {state.current_index}")
+            logger.info(f"[check_next_article] Moving to article index {state.current_article_index}")
         
         return state
+    
+    def check_next_relevant_article(self, state: ArticleState):
+        if self.all_relevant_articles_filtered(state):
+            logger.info("[check_next_relevant_article] No more relevant articles. Ending subgraph")
+        else:
+            logger.info(f"[check_next_relevant_article] Moving to relevant article index {state.current_relevant_index}")
 
     def save_article(self, state: ArticleState):
-        logger.info(f"[save_article] Saving relevant article at index {state.current_index}")
+        logger.info(f"[save_article] Saving relevant article at index {state.current_article_index}")
 
-        state.relevant_articles.append(state.articles[state.current_index])
-        state.current_index += 1
+        state.relevant_articles.append(state.articles[state.current_article_index])
+        state.current_article_index += 1
         return state
 
     
     def skip_article(self, state: ArticleState):
-        logger.info(f"[skip_article] Skipping article at index {state.current_index}")
-        state.current_index += 1
+        logger.info(f"[skip_article] Skipping article at index {state.current_article_index}")
+        state.current_article_index += 1
         return state
     
-    def analyze_article(self, state: ArticleState):
-        logger.info(f"[analyze_article] Analyzing article at index {state.current_index}")
+    def check_article_relevancy(self, state: ArticleState):
+        logger.info(f"[check_article_relevancy] Analyzing article at index {state.current_article_index}")
 
         prompt = CHECK_ARTICLE_RELEVANCY_PROMPT.format(
             question=state.question,
             choices=format_choices(state.choices),
-            article=get_article_text(state.articles, state.current_index)
+            article=get_article_text(state.articles, state.current_article_index)
         )
 
         response = self.llm.invoke([HumanMessage(content=prompt)])
@@ -70,13 +79,23 @@ class ArticleAnalysisSubgraph(BaseGraph):
 
         state.messages.append(response)
         return state
+
+    def filter_article_information(self, state: ArticleState):
+        
+        state.current_relevant_index += 1
+        return state
+
     
     def build(self) -> StateGraph:
         builder = StateGraph(ArticleState)
+        # Phase 1
         builder.add_node("check_next_article", self.check_next_article)
-        builder.add_node("analyze_article", self.analyze_article)
+        builder.add_node("check_article_relevancy", self.check_article_relevancy)
         builder.add_node("save_article", self.save_article)
         builder.add_node("skip_article", self.skip_article)
+        # Phase 2
+        builder.add_node("check_next_relevant_article", self.check_next_relevant_article)
+        builder.add_node("filter_article_information", self.filter_article_information)
 
         builder.set_entry_point("check_next_article")
 
@@ -85,19 +104,28 @@ class ArticleAnalysisSubgraph(BaseGraph):
 
         builder.add_conditional_edges(
             "check_next_article",
-            lambda state: "END" if self.no_more_articles(state) else "analyze_article",
+            lambda state: "check_next_relevant_article" if self.all_articles_checked(state) else "check_article_relevancy",
             {
-                "END": END,
-                "analyze_article": "analyze_article"
+                "check_next_relevant_article": "check_next_relevant_article",
+                "check_article_relevancy": "check_article_relevancy"
             }
         )
 
         builder.add_conditional_edges(
-            "analyze_article",
+            "check_article_relevancy",
             lambda state: "save_article" if self.article_is_relevant(state) else "skip_article",
             {
                 "save_article": "save_article",
                 "skip_article": "skip_article"
+            }
+        )
+
+        builder.add_conditional_edges(
+            "check_next_relevant_article",
+            lambda state: "END" if self.all_relevant_articles_filtered(state) else "filter_article_information",
+            {
+                "filter_article_information": "filter_article_information",
+                "END": END
             }
         )
 

@@ -4,7 +4,7 @@ import numpy as np
 from PIL import Image
 from typing import List, Any, Sequence, Union
 from transformers import AutoProcessor, CLIPModel
-from src.services.embedding_service.image_embedding.base import BaseImageEmbeddingModel
+from src.services.embedding_service.models.image_embedding.base import BaseImageEmbeddingModel
 
 class OpenCLIPImageEmbeddingModel(BaseImageEmbeddingModel):
     

@@ -1,0 +1,1 @@
+from src.services.embedding_service.models.image_embedding.vit_embedding_model import ViTImageEmbeddingModel

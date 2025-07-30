@@ -20,7 +20,7 @@ class BaseDetector(ABC):
 # Roboflow-based Detector
 # ===============================
 class RoboflowDetector(BaseDetector):
-    def __init__(self, version: int = 3):
+    def __init__(self):
         self.api_key = ROBOFLOW_API_KEY
         self.model_name = ROBOFLOW_MODEL_NAME
         self.version = ROBOFLOW_MODEL_VERSION

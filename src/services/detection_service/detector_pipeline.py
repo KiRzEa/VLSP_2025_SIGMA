@@ -1,7 +1,10 @@
 import os
 import json
-from src.services.detection_service.detector_models import BaseDetector
-from src.services.detection_service.crop_utils import crop_item, save_crop
+from src.services.detection_service.detector_models import (
+    BaseDetector,
+    RoboflowDetector
+)
+from src.utils.crop_utils import crop_item, save_crop
 
 class DetectorPipeline:
     """
@@ -12,13 +15,13 @@ class DetectorPipeline:
     4. Tạo file metadata JSON chứa thông tin của tất cả ảnh đã crop
     """
 
-    def __init__(self, detector: BaseDetector):
+    def __init__(self, detector: BaseDetector = RoboflowDetector()):
         """
         Khởi tạo pipeline với một detector cụ thể (phải kế thừa BaseDetector)
         """
         self.detector = detector
 
-    def detect(self, image_path: str):
+    def detect(self, image: str):
         """
         Chạy bước detect, trả về danh sách prediction từ ảnh
 
@@ -28,7 +31,7 @@ class DetectorPipeline:
         Returns:
             List[Dict]: danh sách prediction từ detector
         """
-        return self.detector.detect(image_path)
+        return self.detector.detect(image)
 
     def crop_and_save(self, image_path: str, predictions: list, output_dir: str, metadata_path: str):
         """

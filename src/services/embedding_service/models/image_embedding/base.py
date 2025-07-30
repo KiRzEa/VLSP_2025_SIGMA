@@ -15,7 +15,8 @@ class BaseImageEmbeddingModel(BaseEmbeddingModel):
     @abstractmethod
     def encode(self, images: Sequence[Image.Image], batch_size: int = 32) -> np.ndarray:
         pass
-    
+
     def encode_paths(self, paths: Sequence[Union[str, Path]], batch_size: int = 32) -> np.ndarray:
         images = [Image.open(path).convert("RGB") for path in paths]
-        return self.encode(image=images, batch_size=batch_size)
+        return self.encode(images=images, batch_size=batch_size)
+    

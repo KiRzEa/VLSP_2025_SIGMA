@@ -2,6 +2,7 @@ from functools import lru_cache
 
 from src.services.knowledge_base_service import LawDatabase
 from src.services.llm_service import AzureChatModel, FPTChatModel
+from src.services.embedding_service import ViTImageEmbeddingModel
 
 
 class Service:
@@ -16,6 +17,9 @@ class Service:
         self.gemma = FPTChatModel(model_name="gemma-3-27b-it")
         self.qwen = FPTChatModel(model_name="Qwen2.5-VL-7B-Instruct")
         self.llama = FPTChatModel(model_name="Llama-4-Scout-17B-16E")
+
+        # Embedding Model
+        self.vit = ViTImageEmbeddingModel()
 
         # DB
         self.law_db = LawDatabase()

@@ -1,0 +1,1 @@
+from src.services.detection_service.detector_pipeline import DetectorPipeline

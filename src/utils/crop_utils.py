@@ -4,11 +4,14 @@ import matplotlib.pyplot as plt
 from PIL import Image, ImageDraw
 from typing import Union
 
-def crop_item(image_path: str, prediction: dict):
+def crop_item(image_path: Union[Image.Image, str], prediction: dict):
     """
     Cắt 1 đối tượng từ ảnh theo toạ độ bounding box trong prediction.
     """
-    image = Image.open(image_path).convert("RGB")
+    if isinstance(image_path, Image.Image):
+        image = image_path
+    elif isinstance(image_path, str):
+        image = Image.open(image_path).convert("RGB")
     img_w, img_h = image.size
 
     x, y = prediction["x"], prediction["y"]
@@ -19,7 +22,7 @@ def crop_item(image_path: str, prediction: dict):
     x2 = min(int(x + w / 2), img_w)
     y2 = min(int(y + h / 2), img_h)
 
-    return image.crop((x1, y1, x2, y2)), [x1, y1, x2, y2]
+    return image.crop((x1, y1, x2, y2))
 
 def save_crop(cropped_img: Image.Image, save_path: str):
     """

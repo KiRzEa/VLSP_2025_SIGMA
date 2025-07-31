@@ -1,10 +1,11 @@
+import os
 import re
 import json
 import base64
 import requests
 from PIL import Image
 from io import BytesIO
-from typing import List, Dict, Tuple
+from typing import List, Dict, Tuple, Union
 
 from langchain_core.messages import BaseMessage
 
@@ -24,7 +25,7 @@ def extract_images_and_tables(text: str) -> Dict[str, List[str]]:
 
 
 def get_image_format(file_path: str) -> str:
-    ext = file_path.lower().split('.')[-1]
+    ext = os.path.splitext(file_path)[-1].lower().strip(".")
     if ext in ("jpg", "jpeg"):
         return "JPEG"
     elif ext == "png":
@@ -42,21 +43,35 @@ def encode_image_from_pil(img: Image.Image, format: str) -> str:
     return base64.b64encode(buffered.getvalue()).decode("utf-8")
 
 
-def encode_image(image_path: str, resize: bool = False, size: Tuple[int, int] = (1280, 1280)) -> Tuple[str, str]:
+def encode_image(image: Union[Image.Image, str], resize: bool = False, size: Tuple[int, int] = (1280, 1280)) -> Tuple[str, str]:
     """
-    Encode an image file to base64 string.
-    
+    Encode an image (file path or PIL.Image) to a base64 string and get its format.
+
+    Args:
+        image (Union[Image.Image, str]): Image file path or PIL Image.
+        resize (bool): Whether to resize image.
+        size (Tuple[int, int]): Resize dimensions.
+
     Returns:
-        Tuple[str, str]: (base64_string, image_format)
+        Tuple[str, str]: (base64-encoded string, image format like "jpeg" or "png")
     """
-    format = get_image_format(image_path)
-    
-    with Image.open(image_path) as img:
-        if resize:
-            img = resize_image(img, size)
-        encoded_string = encode_image_from_pil(img, format)
-    
-    return encoded_string, format.lower()
+    if isinstance(image, str):
+        img = Image.open(image)
+        img_format = get_image_format(image)
+    elif isinstance(image, Image.Image):
+        img = image
+        img_format = img.format if img.format else "PNG"  # fallback
+    else:
+        raise ValueError("Input must be a file path or a PIL.Image.Image instance.")
+
+    if resize:
+        img = img.resize(size)
+
+    buffered = BytesIO()
+    img.save(buffered, format=img_format)
+    encoded_string = base64.b64encode(buffered.getvalue()).decode("utf-8")
+
+    return encoded_string, img_format.lower()
 
 
 def encode_image_content_from_url(
@@ -79,7 +94,7 @@ def encode_image_content_from_url(
             return encode_image_from_pil(img, "PNG")
     return base64.b64encode(response.content).decode("utf-8")
 
-def extract_json_from_deepseek_response(response: BaseMessage, return_json=False) -> dict:
+def extract_json_from_deepseek_response(response: Union[BaseMessage, str], return_json=False) -> dict:
     """
     Extract and parse the JSON content from a DeepSeek model response.
 
@@ -90,7 +105,12 @@ def extract_json_from_deepseek_response(response: BaseMessage, return_json=False
         dict: A parsed JSON dictionary from the content following the </think> tag.
 
     """
-    content = response.content.replace("json", "").replace("```", "").strip()
+    if isinstance(response, BaseMessage):
+        content = response.content
+    else:
+        content = response
+
+    content = content.replace("json", "").replace("```", "").strip()
 
     # Attempt to find the content after </think>
     if "</think>" in content:

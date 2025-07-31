@@ -31,3 +31,38 @@ Yêu cầu:
 ]
 ```
 """
+
+SIGN_SEMANTIC_MATCHING_PROMPT = """\
+Bạn là một chuyên gia giao thông được giao nhiệm vụ đối chiếu và so sánh các biển báo giao thông.
+
+Dưới đây là hai bộ thông tin về biển báo:
+- Một là biển báo cần nhận diện (ảnh query, trích xuất từ thực tế).
+- Hai là biển báo từ cơ sở dữ liệu đã được trích xuất sẵn thông tin.
+
+Hãy đánh giá mức độ tương đồng giữa chúng, dựa trên các tiêu chí:
+1. **Hình dạng** (shape) có giống nhau không?
+2. **Màu nền** (background_color) và **viền** (border) có trùng hoặc tương tự không?
+3. Có **biểu tượng** giống nhau không? (ví dụ: mũi tên, xe, người, ...)
+4. **Nội dung chữ hoặc số** trên biển có giống hoặc tương đồng không?
+5. Có cùng **gạch chéo đỏ** hoặc đặc điểm nổi bật không?
+6. Có biển phụ kèm theo giống nhau không?
+
+### Yêu cầu:
+- Hãy trả về đánh giá dưới dạng JSON, gồm:
+{{
+  "match_score": "điểm số từ 0 đến 10 thể hiện mức độ phù hợp",
+  "reason": "giải thích ngắn gọn vì sao lại cho điểm đó",
+  "is_match": True nếu hai biển có khả năng giống nhau cao (điểm ≥ 4), False nếu không.
+}}
+
+### Dữ liệu:
+
+**Query image attributes**:
+```json
+{query_attributes}
+```
+**Candidate image attributes**:
+```json
+{candidate_attributes}
+```
+"""

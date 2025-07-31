@@ -5,9 +5,9 @@ from PIL import Image
 from pathlib import Path
 from tqdm import tqdm
 
-from src.services.service_manager import get_service
+from src.services.embedding_service import ViTImageEmbeddingModel
 
-service = get_service()
+vit = ViTImageEmbeddingModel()
 
 # CONFIG
 IMAGE_FOLDER = Path("./data/processed/law_db/images")
@@ -22,21 +22,24 @@ with open(ARTICLE_JSON, "r", encoding="utf-8") as f:
 
 image_filenames = []
 image_paths = []
+image_metadata = []
 for article in articles:
     for img in article["images"]:
         image_filenames.append(img)
         image_paths.append(IMAGE_FOLDER / img)
+        image_metadata.append(article)
 
 # === FEATURE EXTRACTION ===
 all_features = []
 print("Extracting features...")
-all_features = service.vit.encode_paths(image_paths)
+all_features = vit.encode_paths(image_paths)
 
 # === SAVE VECTOR DB TO DISK ===
 print("Saving vector database to disk...")
 torch.save({
     "features": all_features,
-    "filenames": image_filenames
+    "filenames": image_filenames,
+    "metadata": image_metadata
 }, VEC_DB_PATH)
 print(f"Saved to {VEC_DB_PATH}")
 

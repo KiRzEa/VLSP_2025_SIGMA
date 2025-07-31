@@ -21,6 +21,7 @@ class ImageRetriever(BaseRetriever):
         db = torch.load(self.db_path, weights_only=False)
         self.features = torch.tensor(db["features"])  # (N, D)
         self.filenames = db["filenames"]
+        self.metadata = db["metadata"]
 
     def search(self, image: Union[str, Path, Image.Image], top_k=5) -> List[Dict]:
         if isinstance(image, (str, Path)):
@@ -34,6 +35,6 @@ class ImageRetriever(BaseRetriever):
         top_scores, top_indices = torch.topk(sim, top_k)
 
         return [
-            {"filename": self.filenames[i], "score": float(top_scores[j])}
+            {"filename": self.filenames[i], "metadata": self.metadata[i], "score": float(top_scores[j])}
             for j, i in enumerate(top_indices)
         ]

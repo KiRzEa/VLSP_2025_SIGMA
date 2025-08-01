@@ -1,8 +1,8 @@
-from langgraph.graph.message import add_messages
-from langchain_core.messages import AnyMessage
-from typing import List, Dict, Annotated, TypedDict
+from pydantic import BaseModel, Field
+from typing import List, Dict, Annotated
+from langchain_core.messages import BaseMessage, HumanMessage
 
-class Article(TypedDict):
+class Article(BaseModel):
     title: str
     text: str
 
@@ -22,7 +22,7 @@ class Article(TypedDict):
         preview = self.text[:50] + "..." if len(self.text) > 50 else self.text
         return f"Article(title={self.title!r}, text={preview!r})"
 
-class ArticleState(TypedDict, total=False):
+class ArticleState(BaseModel):
     # Input
     question: str
     choices: Dict
@@ -31,11 +31,13 @@ class ArticleState(TypedDict, total=False):
     # Phase 1 - Article relevance check
     articles: List[Article]
     current_article_index: int = 0
-    relevant_articles: List[Article]
+    relevant_articles: List[Article] = Field(default_factory=list)
 
     # Phase 2 - Info filtering from relevant articles
     current_relevant_index: int = 0
-    extracted_info: List[Dict]
+    extracted_info: List[Dict] = Field(default_factory=list)
 
-    # Chat logs
-    messages: Annotated[List[AnyMessage], add_messages]
+    # Message history (chat logs)
+    messages: Annotated[List[BaseMessage], Field(default_factory=lambda: [
+        HumanMessage(content="Bắt đầu phân tích các điều luật liên quan")
+    ])]

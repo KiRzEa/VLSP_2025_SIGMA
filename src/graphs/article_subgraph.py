@@ -23,67 +23,73 @@ class ArticleAnalysisSubgraph(BaseGraph):
         self.graph: StateGraph = None
     
     def all_articles_checked(self, state: ArticleState) -> bool:
-        return state.current_article_index >= len(state.articles)
+        return state["current_article_index"] >= len(state["articles"])
 
     def all_relevant_articles_filtered(self, state: ArticleState) -> bool:
-        return state.current_relevant_index >= len(state.relevant_articles)
-    
+        return state.get("current_relevant_index", 0) >= len(state.get("relevant_articles", []))
+
     def article_is_relevant(self, state: ArticleState) -> bool:
         try:
-            last_msg = state.messages[-1].content
+            last_msg = state["messages"][-1].content
             parsed = json.loads(last_msg)
             return parsed.get("relevant", False) is True
         except Exception as e:
             logger.warning(f"Failed to parse relevance from LLM response: {e}")
             return False
         
-    def check_next_article(self, state: ArticleState):
+    def check_next_article(self, state: ArticleState) -> ArticleState:
+        print(state)
         if self.all_articles_checked(state):
-            logger.info("[check_next_article] No more articles. Start filtering information from relevant articles.")
+            logger.info("[check_next_article] No more articles. Proceeding to filter relevant ones.")
         else:
-            logger.info(f"[check_next_article] Moving to article index {state.current_article_index}")
-        
+            logger.info(f"[check_next_article] Moving to article index {state['current_article_index']}")
         return state
     
-    def check_next_relevant_article(self, state: ArticleState):
+    def check_next_relevant_article(self, state: ArticleState) -> ArticleState:
         if self.all_relevant_articles_filtered(state):
-            logger.info("[check_next_relevant_article] No more relevant articles. Ending subgraph")
+            logger.info("[check_next_relevant_article] No more relevant articles. Ending subgraph.")
         else:
-            logger.info(f"[check_next_relevant_article] Moving to relevant article index {state.current_relevant_index}")
-
-    def save_article(self, state: ArticleState):
-        logger.info(f"[save_article] Saving relevant article at index {state.current_article_index}")
-
-        state.relevant_articles.append(state.articles[state.current_article_index])
-        state.current_article_index += 1
+            logger.info(f"[check_next_relevant_article] Moving to relevant article index {state['current_relevant_index']}")
         return state
+
+    def save_article(self, state: ArticleState) -> ArticleState:
+        logger.info(f"[save_article] Saving relevant article at index {state['current_article_index']}")
+
+        relevant_article = state["articles"][state["current_article_index"]]
+        return state.update({
+            "relevant_articles": [relevant_article],
+            "current_article_index": state["current_article_index"] + 1
+        })
 
     
     def skip_article(self, state: ArticleState):
-        logger.info(f"[skip_article] Skipping article at index {state.current_article_index}")
-        state.current_article_index += 1
-        return state
+        logger.info(f"[skip_article] Skipping article at index {state['current_article_index']}")
+        return state.update({
+            "current_article_index": state["current_article_index"] + 1
+        })
     
     def check_article_relevancy(self, state: ArticleState):
-        logger.info(f"[check_article_relevancy] Analyzing article at index {state.current_article_index}")
+        logger.info(f"[check_article_relevancy] Analyzing article at index {state['current_article_index']}")
 
         prompt = CHECK_ARTICLE_RELEVANCY_PROMPT.format(
             question=state.question,
             choices=format_choices(state.choices),
-            article=get_article_text(state.articles, state.current_article_index)
+            article=get_article_text(state.articles, state['current_article_index'])
         )
 
         response = self.llm.invoke([HumanMessage(content=prompt)])
 
         response.content = extract_json_from_deepseek_response(response) 
 
-        state.messages.append(response)
-        return state
+        return state.update({
+            "messages": [response]
+        })
 
     def filter_article_information(self, state: ArticleState):
         
-        state.current_relevant_index += 1
-        return state
+        return state.update({
+            "current_relevant_index": state["current_relevant_index"] + 1
+        })
 
     
     def build(self) -> StateGraph:

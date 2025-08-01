@@ -12,8 +12,8 @@ class FPTChatModel(BaseChatModel):
         self,
         model_name: str = "Qwen2.5-VL-7B-Instruct",
         settings: Settings = settings,
-        temperature: float = 0.9,
-        max_tokens: int = 2048,
+        temperature: float = 0.0,
+        max_tokens: int = 16384,
         max_retries: int = 3
     ):
         super().__init__()

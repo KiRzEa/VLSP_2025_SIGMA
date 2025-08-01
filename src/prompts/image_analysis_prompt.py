@@ -49,11 +49,15 @@ Hãy đánh giá mức độ tương đồng giữa chúng, dựa trên các ti�
 
 ### Yêu cầu:
 - Hãy trả về đánh giá dưới dạng JSON, gồm:
-{{
-  "match_score": "điểm số từ 0 đến 10 thể hiện mức độ phù hợp",
-  "reason": "giải thích ngắn gọn vì sao lại cho điểm đó",
-  "is_match": True nếu hai biển có khả năng giống nhau cao (điểm ≥ 4), False nếu không.
-}}
+[
+  {{
+    "image_id": "tên của ảnh đầu vào (ví dụ: image022.png)",
+    "match_score": "điểm số từ 0 đến 10 thể hiện mức độ phù hợp",
+    "reason": "giải thích ngắn gọn vì sao lại cho điểm đó",
+    "is_match": True nếu hai biển có khả năng giống nhau cao (điểm ≥ 4), False nếu không.
+  }},
+  ...
+]
 
 ### Dữ liệu:
 

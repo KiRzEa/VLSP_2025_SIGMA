@@ -1,6 +1,6 @@
 from pydantic import BaseModel, Field
-from langchain_core.messages import BaseMessage, HumanMessage
 from typing import List, Dict, Annotated
+from langchain_core.messages import BaseMessage, HumanMessage
 
 class Article(BaseModel):
     title: str
@@ -23,12 +23,21 @@ class Article(BaseModel):
         return f"Article(title={self.title!r}, text={preview!r})"
 
 class ArticleState(BaseModel):
+    # Input
     question: str
     choices: Dict
     image_analysis: str
+
+    # Phase 1 - Article relevance check
     articles: List[Article]
-    current_index: int = 0
+    current_article_index: int = 0
     relevant_articles: List[Article] = Field(default_factory=list)
+
+    # Phase 2 - Info filtering from relevant articles
+    current_relevant_index: int = 0
+    extracted_info: List[Dict] = Field(default_factory=list)
+
+    # Message history (chat logs)
     messages: Annotated[List[BaseMessage], Field(default_factory=lambda: [
         HumanMessage(content="Bắt đầu phân tích các điều luật liên quan")
     ])]

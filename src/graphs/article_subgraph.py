@@ -1,8 +1,8 @@
 import json
 
 from langgraph.graph import StateGraph, END
-from langgraph.graph.message import add_messages
 from langchain_core.messages import HumanMessage
+from langgraph.graph.state import CompiledStateGraph
 
 from src.models import ArticleState
 from src.core.logger import setup_logger
@@ -71,7 +71,7 @@ class ArticleAnalysisSubgraph(BaseGraph):
         state.messages.append(response)
         return state
     
-    def build(self) -> StateGraph:
+    def build(self) -> CompiledStateGraph:
         builder = StateGraph(ArticleState)
         builder.add_node("check_next_article", self.check_next_article)
         builder.add_node("analyze_article", self.analyze_article)

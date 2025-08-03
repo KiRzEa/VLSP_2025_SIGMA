@@ -5,11 +5,12 @@ import base64
 import requests
 from PIL import Image
 from io import BytesIO
+from pathlib import Path
 from typing import List, Dict, Tuple, Union
 
 from langchain_core.messages import BaseMessage
 
-from src.models.article import Article
+from src.models.article_state import Article
 
 def extract_images_and_tables(text: str) -> Dict[str, List[str]]:
     """
@@ -55,7 +56,7 @@ def encode_image(image: Union[Image.Image, str], resize: bool = False, size: Tup
     Returns:
         Tuple[str, str]: (base64-encoded string, image format like "jpeg" or "png")
     """
-    if isinstance(image, str):
+    if isinstance(image, (Path, str)):
         img = Image.open(image)
         img_format = get_image_format(image)
     elif isinstance(image, Image.Image):

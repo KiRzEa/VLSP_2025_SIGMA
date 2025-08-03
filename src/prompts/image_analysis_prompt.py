@@ -37,27 +37,44 @@ Bạn là một chuyên gia giao thông được giao nhiệm vụ đối chiế
 
 Dưới đây là hai bộ thông tin về biển báo:
 - Một là biển báo cần nhận diện (ảnh query, trích xuất từ thực tế).
-- Hai là biển báo từ cơ sở dữ liệu đã được trích xuất sẵn thông tin.
+- Hai là **danh sách biển báo trong cơ sở dữ liệu** (gồm nhiều ứng viên), đã được trích xuất thông tin mô tả chi tiết.
 
 Hãy đánh giá mức độ tương đồng giữa chúng, dựa trên các tiêu chí:
-1. **Hình dạng** (shape) có giống nhau không?
-2. **Màu nền** (background_color) và **viền** (border) có trùng hoặc tương tự không?
-3. Có **biểu tượng** giống nhau không? (ví dụ: mũi tên, xe, người, ...)
-4. **Nội dung chữ hoặc số** trên biển có giống hoặc tương đồng không?
-5. Có cùng **gạch chéo đỏ** hoặc đặc điểm nổi bật không?
-6. Có biển phụ kèm theo giống nhau không?
+1. **Hình dạng** (`shape`) có giống nhau không? (*ưu tiên cao*)
+2. **Màu nền** (`background_color`) và **viền** (`border`) có trùng hoặc tương tự không?
+3. Có **biểu tượng** (`icon`) giống hoặc tương đương không? (*ưu tiên cao*)
+4. **Nội dung chữ hoặc số** (`text`) trên biển có giống hoặc tương đồng không?
+5. Có cùng **gạch chéo đỏ** (`diagonal_line`) hoặc đặc điểm nổi bật không?
+6. Có **biển phụ** (`sub_sign`) giống nhau không?
+
+Chỉ so sánh những trường không phải `null`. Nếu một trường bị thiếu trong cả query hoặc candidate thì **bỏ qua tiêu chí đó**.
+
+Nếu có nhiều ứng viên tương tự nhau, **ưu tiên các yếu tố quan trọng** như `shape`, `icon`, và `text`.
 
 ### Yêu cầu:
-- Hãy trả về đánh giá dưới dạng JSON, gồm:
-[
-  {{
-    "image_id": "tên của ảnh đầu vào (ví dụ: image022.png)",
-    "match_score": "điểm số từ 0 đến 10 thể hiện mức độ phù hợp",
-    "reason": "giải thích ngắn gọn vì sao lại cho điểm đó",
-    "is_match": True nếu hai biển có khả năng giống nhau cao (điểm ≥ 4), False nếu không.
-  }},
-  ...
-]
+
+- **Chỉ trả về kết quả dưới dạng JSON thuần**, có thể phân tích bằng `json.loads()` (không có mô tả hay giải thích thêm).
+- Chỉ trả về **một ứng viên phù hợp nhất** (best match) từ tất cả các ứng viên.
+- Nếu có nhiều ứng viên có điểm tương đồng như nhau, **ưu tiên các tiêu chí quyết định** như `shape`, `icon`, và `text` để chọn ra ứng viên phù hợp nhất.
+
+### Format bắt buộc:
+```json
+{{
+  "image_id": "id của ảnh ứng viên (ví dụ: image022.png)",
+  "id": "Biển số của biển báo (từ candidate)",
+  "reason": "Giải thích ngắn gọn vì sao đây là lựa chọn phù hợp nhất (dựa trên các tiêu chí)",
+  "attributes": {{
+    "id": "...",
+    "shape": "...",
+    "background_color": "...",
+    "border": "...",
+    "icon": "...",
+    "text": "...",
+    "diagonal_line": "...",
+    "sub_sign": "..."
+  }}
+}}
+```
 
 ### Dữ liệu:
 

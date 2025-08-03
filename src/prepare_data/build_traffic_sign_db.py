@@ -70,12 +70,3 @@ if __name__ == '__main__':
 
     print("[INFO] Done.")
 
-    ORIG_IMAGE_DIR = Path("./data/processed/law_db/images")
-    TARGET_IMAGE_DIR = Path("./data/traffic_sign_db/images")
-    if not TARGET_IMAGE_DIR.exists():
-        os.makedirs(TARGET_IMAGE_DIR, exist_ok=True)
-
-    for traffic_sign in traffic_sign_descriptions:
-        for image_path in traffic_sign["images"]:
-            im 
-

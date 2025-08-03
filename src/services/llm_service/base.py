@@ -45,7 +45,7 @@ class BaseChatModel(ABC):
     def generate(
         self,
         system_prompt: str,
-        user_prompt: str,
+        user_prompt: str = "",
         image_paths: Optional[List[str]] = None
     ) -> str:
         """
@@ -68,7 +68,7 @@ class BaseChatModel(ABC):
                 HumanMessage(content=user_content),
             ]
             response = self.client.invoke(messages)
-            return response.content
+            return response
         except Exception as e:
             raise RuntimeError(f"Failed to generate response: {e}") from e
 

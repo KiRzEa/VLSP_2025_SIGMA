@@ -17,7 +17,7 @@ from src.utils import (
 # --- Logging setup ---
 logger = setup_logger("ArticleAgent")
 
-class ArticleAnalysisSubgraph(BaseGraph):
+class ArticleSubGraph(BaseGraph):
     def __init__(self, llm):
         self.llm = llm
         self.graph: StateGraph = None

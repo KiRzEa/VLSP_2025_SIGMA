@@ -2,7 +2,7 @@ from abc import ABC, abstractmethod
 from typing import Optional, List, Dict
 
 from langchain_core.language_models.chat_models import BaseChatModel as LangChainChatModel
-from langchain_core.messages import HumanMessage, SystemMessage
+from langchain_core.messages import HumanMessage, SystemMessage, AIMessage
 
 from src.utils import encode_image
 
@@ -44,10 +44,10 @@ class BaseChatModel(ABC):
 
     def generate(
         self,
-        system_prompt: str,
+        system_prompt: str = "",
         user_prompt: str = "",
         image_paths: Optional[List[str]] = None
-    ) -> str:
+    ) -> AIMessage:
         """
         Generate a response from the LLM using optional images and user prompt.
 

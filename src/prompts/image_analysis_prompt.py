@@ -87,3 +87,73 @@ Nếu có nhiều ứng viên tương tự nhau, **ưu tiên các yếu tố qua
 {candidate_attributes}
 ```
 """
+
+INTERPRET_SIGN_MEANING_PROMPT= """\
+Bạn là chuyên gia về luật giao thông Việt Nam, có nhiệm vụ phân tích và giải thích ý nghĩa của các biển báo giao thông theo **Bộ luật giao thông đường bộ Việt Nam**.
+
+### Nhiệm vụ:
+
+1. **Phân loại và giải nghĩa từng biển báo riêng lẻ**:
+   - Dựa trên các thuộc tính (hình dạng, màu sắc, biểu tượng, chữ viết, ...) để xác định:
+     - **Loại biển báo**: ví dụ *biển cấm*, *biển cảnh báo*, *biển chỉ dẫn*, *biển hiệu lệnh*, v.v.
+     - **Nội dung/ý nghĩa chính xác của từng biển báo** theo đúng quy định Việt Nam.
+
+2. **Phân tích mối quan hệ giữa các biển báo nếu có**:
+   - Nếu có **biển phụ** (thông qua trường `"sub_sign"`), hãy xác định nó **bổ nghĩa cho biển báo nào** và **ý nghĩa khi kết hợp lại là gì**.
+   - Nếu có **các biển báo chính khác nhau nhưng mang thông điệp liên quan** (ví dụ biển cấm + biển hiệu lệnh về tốc độ), hãy mô tả **ý nghĩa tổ hợp**.
+
+### Yêu cầu:
+
+- **Chỉ trả về kết quả dưới dạng JSON thuần**, có thể phân tích bằng `json.loads()` (không có mô tả hay giải thích thêm).
+   
+### Format bắt buộc (JSON):
+
+```json
+{{
+  "individual_signs": [
+    {{
+      "type": "Loại biển báo giao thông, xác định theo quy chuẩn Việt Nam. Ví dụ: 'Biển cấm', 'Biển cảnh báo', 'Biển chỉ dẫn', 'Biển hiệu lệnh', 'Biển phụ'.",
+      "meaning": "Nội dung hoặc thông điệp chính xác của biển báo đó, mô tả hành vi mà người tham gia giao thông cần lưu ý, cấm, tuân theo hoặc cảnh báo."
+    }},
+    ...
+  ],
+  "combinations": [
+    {{
+      "combined_signs": "Danh sách các biển báo có mối liên hệ, thường gồm 1 biển chính và 1 hoặc nhiều biển phụ. Chuỗi mô tả tên hoặc nội dung dễ hiểu của từng biển.",
+      "meaning": "Ý nghĩa của việc kết hợp các biển báo này lại với nhau. Ví dụ như biển tốc độ kết hợp với biển phụ áp dụng cho xe tải, cho ra thông điệp đầy đủ là 'Chỉ xe tải mới bị giới hạn tốc độ'."
+    }},
+    ...
+  ]
+}}
+```
+
+### Dữ liệu đầu vào:
+```json
+{query_descriptions}
+```
+"""
+
+SCENE_DESCRIPTION_PROMPT = """\
+Bạn là chuyên gia phân tích hình ảnh trong lĩnh vực giao thông, có nhiệm vụ **mô tả ngữ cảnh giao thông tổng thể của một bức ảnh** thực tế, dựa trên:
+- Hình ảnh thực tế chứa các biển báo giao thông
+- Danh sách các biển báo đã được nhận diện, phân loại và giải nghĩa theo luật giao thông Việt Nam
+
+### Mục tiêu:
+1. **Xác định ngữ cảnh tổng thể của bức ảnh**: Đây là đoạn mô tả cảnh vật, tình huống giao thông, các quy định hiện hành trong khung cảnh này. Hãy mô tả như thể bạn đang hướng dẫn một người lái xe chuẩn bị đi qua khu vực đó.
+2. **Liên kết các biển báo với ngữ cảnh**:
+   - Giải thích ngắn gọn **tác động của các biển báo** đến hành vi người lái xe.
+   - Ví dụ: nếu có biển cấm rẽ trái + biển phụ áp dụng cho xe tải → nghĩa là “xe tải không được rẽ trái tại đoạn này”.
+
+### Đầu ra yêu cầu:
+- Trả về kết quả dưới dạng JSON thuần có cấu trúc như sau:
+
+```json
+{{
+  "scene_text": "Mô tả bằng tiếng Việt, dài 2-5 câu, phản ánh ngữ cảnh giao thông tổng thể của bức ảnh, bao gồm vị trí giả định (nếu có), loại khu vực (đường nội đô, quốc lộ, ngã ba, khu dân cư, v.v.), hành vi người lái cần chú ý, và quy định được áp dụng qua các biển báo."
+}}
+```
+
+### Dữ liệu đầu vào:
+- Danh sách các biển báo đã phân tích:
+{sign_interpretion}
+"""

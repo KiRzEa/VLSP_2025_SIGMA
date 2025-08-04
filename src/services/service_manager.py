@@ -23,7 +23,7 @@ class Service:
         self.law_db = LawDatabase()
 
         # Retriever
-        self.image_retriever = ImageRetriever()
+        # self.image_retriever = ImageRetriever()
 
         # Detector
         self.detector = DetectorPipeline()

@@ -1,1 +1,2 @@
 from src.services.embedding_service.models.image_embedding.vit_embedding_model import ViTImageEmbeddingModel
+from src.services.embedding_service.models.text_embedding.e5_embedding_model import E5TextEmbeddingModel

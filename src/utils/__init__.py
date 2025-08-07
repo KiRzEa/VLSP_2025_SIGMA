@@ -3,7 +3,8 @@ from src.utils.data_utils import (
     load_image,
     load_law_db,
     load_table,
-    convert_html_to_dataframe
+    convert_html_to_dataframe,
+    format_article,
 )
 from src.utils.utilities import (
     get_image_format,

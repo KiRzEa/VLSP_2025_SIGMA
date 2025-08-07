@@ -72,3 +72,12 @@ def convert_html_to_dataframe(law_data: dict, save_dir: str):
         article["text"] = updated_content
 
     return law_data
+
+def format_article(article):
+    document = article.copy()
+    text = f"Tiêu đề: {article['article_title']}\n\nNội Dung: {article['text']}"
+    document.pop("text")
+    document.pop("images")
+    document.pop("tables")
+    metadata = document
+    return text, metadata

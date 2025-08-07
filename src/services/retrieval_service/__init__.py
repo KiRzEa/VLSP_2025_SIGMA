@@ -1,0 +1,1 @@
+from src.services.retrieval_service.image_retriever import ImageRetriever

@@ -1,0 +1,1 @@
+from src.services.knowledge_base_service.law_db import LawDatabase

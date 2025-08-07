@@ -1,1 +1,0 @@
-from src.models.fpt_clients.multimodal_model_client import FPTMultimodalModelClient

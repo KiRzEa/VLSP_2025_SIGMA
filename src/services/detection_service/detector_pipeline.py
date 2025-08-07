@@ -1,7 +1,11 @@
 import os
 import json
-from src.services.detection_service.detector_models import BaseDetector
-from src.services.detection_service.crop_utils import crop_item, save_crop
+from PIL import Image
+from src.services.detection_service.detector_models import (
+    BaseDetector,
+    RoboflowDetector
+)
+from src.utils.crop_utils import crop_item, save_crop
 
 class DetectorPipeline:
     """
@@ -12,13 +16,13 @@ class DetectorPipeline:
     4. Tạo file metadata JSON chứa thông tin của tất cả ảnh đã crop
     """
 
-    def __init__(self, detector: BaseDetector):
+    def __init__(self, detector: BaseDetector = RoboflowDetector()):
         """
         Khởi tạo pipeline với một detector cụ thể (phải kế thừa BaseDetector)
         """
         self.detector = detector
 
-    def detect(self, image_path: str):
+    def detect(self, image: str, top_k=None, min_area_ratio=1e-3):
         """
         Chạy bước detect, trả về danh sách prediction từ ảnh
 
@@ -28,7 +32,29 @@ class DetectorPipeline:
         Returns:
             List[Dict]: danh sách prediction từ detector
         """
-        return self.detector.detect(image_path)
+        # Load image to get dimensions
+        with Image.open(image) as img:
+            img_width, img_height = img.size
+            image_area = img_width * img_height
+        # Run detector
+        predictions = self.detector.detect(image)
+        # Filter out small boxes
+        filtered = [
+            det for det in predictions
+            if (det['width'] * det['height']) / image_area >= min_area_ratio
+        ]
+        # Sort by area (descending)
+        sorted_filtered = sorted(
+            filtered,
+            key=lambda det: det['width'] * det['height'],
+            reverse=True
+        )
+
+        # Apply top_k if needed
+        if top_k:
+            return sorted_filtered[:top_k]
+        else:
+            return sorted_filtered
 
     def crop_and_save(self, image_path: str, predictions: list, output_dir: str, metadata_path: str):
         """

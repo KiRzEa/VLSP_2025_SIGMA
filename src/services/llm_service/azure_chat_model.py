@@ -12,8 +12,8 @@ class AzureChatModel(BaseChatModel):
         self,
         model_name: str = "DeepSeek-R1-0528",
         settings: Settings = settings,
-        temperature: float = 0.9,
-        max_tokens: int = 2048,
+        temperature: float = 0.0,
+        max_tokens: int = 16384,
         max_retries: int = 3
     ):
         super().__init__()

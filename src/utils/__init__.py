@@ -15,5 +15,9 @@ from src.utils.utilities import (
     encode_image_content_from_url,
     extract_json_from_deepseek_response,
     format_choices,
-    get_article_text,
+    format_sign_interpretation,
+    format_processed_articles,
+)
+from src.utils.vlsp_utils import (
+    transform_raw_sample_to_input_state,
 )

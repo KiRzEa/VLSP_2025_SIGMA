@@ -1,43 +1,31 @@
-from pydantic import BaseModel, Field
-from typing import List, Dict, Annotated
-from langchain_core.messages import BaseMessage, HumanMessage
+from pydantic import BaseModel
+from typing import List, Dict, Optional
 
-class Article(BaseModel):
-    title: str
-    text: str
+from langchain_core.messages import AnyMessage
 
-    def __str__(self):
-        """
-        Returns a human-readable string representation of the article,
-        showing the title and a truncated version of the text.
-        """
-        preview = self.text[:50] + "..." if len(self.text) > 50 else self.text
-        return f"Title: {self.title}\nText: {preview}"
+from src.models.base import QuestionType
+from src.models.image_state import ImageOutputState
 
-    def __repr__(self):
-        """
-        Returns a human-readable string representation of the article,
-        showing the title and a truncated version of the text.
-        """
-        preview = self.text[:50] + "..." if len(self.text) > 50 else self.text
-        return f"Article(title={self.title!r}, text={preview!r})"
+class ArticleMetadata(BaseModel):
+    law_id: str
+    article_id: str
+    score: Optional[float] = None
 
-class ArticleState(BaseModel):
-    # Input
+class ProcessedArticle(BaseModel):
+    metadata: ArticleMetadata
+    raw_text: str
+    filtered_info: Optional[str] = None 
+
+class ArticleInputState(BaseModel):
     question: str
-    choices: Dict
-    image_analysis: str
+    choices: Optional[Dict] = None
+    image_analysis: Optional[ImageOutputState]
+    article_ids: Optional[List[Dict]] = None
 
-    # Phase 1 - Article relevance check
-    articles: List[Article]
-    current_article_index: int = 0
-    relevant_articles: List[Article] = Field(default_factory=list)
+class ArticleOutputState(BaseModel):
+    processed_articles: List[ProcessedArticle] = []
 
-    # Phase 2 - Info filtering from relevant articles
-    current_relevant_index: int = 0
-    extracted_info: List[Dict] = Field(default_factory=list)
-
-    # Message history (chat logs)
-    messages: Annotated[List[BaseMessage], Field(default_factory=lambda: [
-        HumanMessage(content="Bắt đầu phân tích các điều luật liên quan")
-    ])]
+class ArticleProcessingState(ArticleInputState, ArticleOutputState):
+    articles: List[ProcessedArticle] = []
+    relevant_articles: List[ProcessedArticle] = []
+    messages: List[AnyMessage] = []

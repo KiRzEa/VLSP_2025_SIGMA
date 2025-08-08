@@ -3,6 +3,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 from PIL import Image, ImageDraw
 from typing import Union
+from pathlib import Path
 
 def crop_item(image_path: Union[Image.Image, str], prediction: dict):
     """
@@ -10,7 +11,7 @@ def crop_item(image_path: Union[Image.Image, str], prediction: dict):
     """
     if isinstance(image_path, Image.Image):
         image = image_path
-    elif isinstance(image_path, str):
+    elif isinstance(image_path, (Path, str)):
         image = Image.open(image_path).convert("RGB")
     img_w, img_h = image.size
 

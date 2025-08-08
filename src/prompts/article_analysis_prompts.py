@@ -8,8 +8,14 @@ Dựa trên thông tin sau, hãy đánh giá xem điều luật dưới đây c�
 ### Các lựa chọn trả lời:
 {choices}
 
-### Điều luật:
-{article}
+### Thông tin nhận diện từ biển báo giao thông:
+{sign_interpretation}
+
+### Ngữ cảnh trong hình ảnh:
+{scene_text}
+
+### Nội dung điều luật:
+{article_text}
 
 ### Yêu cầu:
 Trả lời dưới dạng JSON đúng định dạng sau, không viết thêm bất kỳ dòng nào khác ngoài JSON:

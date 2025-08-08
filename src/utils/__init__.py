@@ -3,7 +3,8 @@ from src.utils.data_utils import (
     load_image,
     load_law_db,
     load_table,
-    convert_html_to_dataframe
+    convert_html_to_dataframe,
+    format_article,
 )
 from src.utils.utilities import (
     get_image_format,
@@ -14,5 +15,9 @@ from src.utils.utilities import (
     encode_image_content_from_url,
     extract_json_from_deepseek_response,
     format_choices,
-    get_article_text,
+    format_sign_interpretation,
+    format_processed_articles,
+)
+from src.utils.vlsp_utils import (
+    transform_raw_sample_to_input_state,
 )

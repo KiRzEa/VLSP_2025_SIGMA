@@ -6,11 +6,11 @@ import requests
 from PIL import Image
 from io import BytesIO
 from pathlib import Path
-from typing import List, Dict, Tuple, Union
+from typing import List, Dict, Optional, Tuple, Union
 
 from langchain_core.messages import BaseMessage
 
-from src.models.article_state import Article
+from src.models.article_state import ProcessedArticle
 
 def extract_images_and_tables(text: str) -> Dict[str, List[str]]:
     """
@@ -127,11 +127,56 @@ def extract_json_from_deepseek_response(response: Union[BaseMessage, str], retur
     
 
 ### PROMPT INPUT FORMAT
-def format_choices(choices: Dict) -> str:
-    return "\n".join(f"- {key}. {value}" for key, value in choices.items())
+def format_choices(choices: Optional[Dict]) -> str:
+    if choices:
+        return "\n".join(f"- {key}. {value}" for key, value in choices.items())
+    else:
+        return "- Đúng\n- Sai"
 
+def format_processed_articles(articles: List[ProcessedArticle]) -> str:
+    if not articles:
+        return "Không có điều luật liên quan."
 
-def get_article_text(articles: List[Article], index: int) -> str:
-    article = articles[index]
-    return f"Tiêu đề: {article.title}\nNội dung: {article.text}"
+    result = []
+    for idx, article in enumerate(articles, start=1):
+        law_id = article.metadata.law_id
+        article_id = article.metadata.article_id
+        filtered = article.filtered_info or "Không có thông tin trích lọc cụ thể."
+                
+        item_str = (
+            f"[{idx}] Điều luật: {law_id} - Điều {article_id}\n"
+            "--- Trích lọc thông tin liên quan:\n"
+            f"{filtered}"
+        )
+        result.append(item_str.strip())
 
+    return "\n\n".join(result)
+
+def format_sign_interpretation(sign_data: dict) -> str:
+    """
+    Format sign_interpretation into a clean Vietnamese string for retrieval queries.
+    """
+    if not sign_data:
+        return "Không có thông tin về biển báo."
+
+    parts = []
+
+    # Biển báo đơn lẻ
+    individual = sign_data.get("individual_signs", [])
+    if individual:
+        parts.append("Biển báo đơn lẻ:")
+        for sign in individual:
+            type_str = sign.get("type", "Không rõ loại")
+            meaning_str = sign.get("meaning", "Không rõ ý nghĩa")
+            parts.append(f"- {type_str}: {meaning_str}")
+
+    # Biển báo kết hợp
+    combos = sign_data.get("combinations", [])
+    if combos:
+        parts.append("\nBiển báo kết hợp:")
+        for combo in combos:
+            combined_signs_str = combo.get("combined_signs", "Không rõ các biển báo kết hợp")
+            meaning_str = combo.get("meaning", "Không rõ ý nghĩa kết hợp")
+            parts.append(f"- {combined_signs_str}: {meaning_str}")
+
+    return "\n".join(parts) if parts else "Không có thông tin về biển báo."

@@ -1,1 +1,2 @@
 from src.services.retrieval_service.image_retriever import ImageRetriever
+from src.services.retrieval_service.text_retriever import TextRetriever

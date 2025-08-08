@@ -2,8 +2,8 @@ from functools import lru_cache
 
 from src.services.knowledge_base_service import LawDatabase
 from src.services.llm_service import AzureChatModel, FPTChatModel
-from src.services.retrieval_service import ImageRetriever
 from src.services.detection_service import DetectorPipeline
+from src.services.retrieval_service import ImageRetriever, TextRetriever
 
 
 class Service:
@@ -24,6 +24,7 @@ class Service:
 
         # Retriever
         # self.image_retriever = ImageRetriever()
+        self.text_retriever = TextRetriever()
 
         # Detector
         self.detector = DetectorPipeline()

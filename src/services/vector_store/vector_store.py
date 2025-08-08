@@ -35,26 +35,16 @@ class MongoVectorStore:
             self.collection.insert_many(documents)
             print(f"Inserted {len(documents)} documents.")
 
-    def search(self, query_vector: List[float], law_id: str, article_id: str, top_k: int = 5) -> List[Dict]:
+    def get_candidates(self, candidate_ids: List[Dict]) -> List[Dict]:
         """
-        Perform brute-force cosine similarity search.
+        Retrieve all chunks with the same law_id and article_id.
         """
-        query_vec = np.array(query_vector)
-
-        # Retrieve candidates with the same law_id and article_id
-        candidates = list(self.collection.find({"law_id": law_id, "article_id": article_id}))
-
-        # Compute cosine similarity manually
-        def cosine_sim(v1, v2):
-            v1, v2 = np.array(v1), np.array(v2)
-            if np.linalg.norm(v1) == 0 or np.linalg.norm(v2) == 0:
-                return -1.0
-            return float(np.dot(v1, v2) / (np.linalg.norm(v1) * np.linalg.norm(v2)))
-
-        scored = [
-            {**doc, "score": cosine_sim(query_vec, doc["embedding"])}
-            for doc in candidates
+        candidate_ids = [
+            {
+                "metadata.law_id": pair["law_id"],
+                "metadata.article_id": pair["article_id"]
+            }
+            for pair in candidate_ids
         ]
-
-        # Sort by similarity and return top_k
-        return sorted(scored, key=lambda x: x["score"], reverse=True)[:top_k]
+        query = {"$or": candidate_ids} if candidate_ids else {}
+        return list(self.collection.find(query))

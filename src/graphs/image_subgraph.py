@@ -4,14 +4,14 @@ from typing import Dict
 from langgraph.graph import StateGraph, END
 from langgraph.graph.state import CompiledStateGraph
 
-from src.services import Service
+from src.services import Service, get_service
 from src.prompts import (
     SIGN_ATTRIBUTES_EXTRACTION_PROMPT,
     INTERPRET_SIGN_MEANING_PROMPT,
     SCENE_DESCRIPTION_PROMPT,
 )
-from src.models import (
-    InputImageState,
+from src.models.image_state import (
+    ImageInputState,
     ImageOutputState,
     ImageProcessingState
 )
@@ -23,16 +23,16 @@ from src.utils import extract_json_from_deepseek_response
 logger = setup_logger("ImageSubgraph")
 
 class ImageSubGraph(StateGraph):
-    def __init__(self, service: Service, detector_config: Dict):
+    def __init__(self, service: Service = get_service(), detector_config: Dict = {"top_k": 5, "min_area_ratio": 1e-2}):
         self.service = service
         self.detector_config = detector_config
 
-        self.graph = None
+        self.graph = self.build()
 
     # --------------------
     # NODES
     # --------------------
-    def detect_signs(self, state: InputImageState) -> ImageProcessingState:
+    def detect_signs(self, state: ImageInputState) -> ImageProcessingState:
         logger.info(f"[detect_signs] Processing image: {state.input_image_path}")
         predictions = self.service.detector.detect(
             image=state.input_image_path,
@@ -114,7 +114,7 @@ class ImageSubGraph(StateGraph):
     def build(self) -> CompiledStateGraph:
         builder = StateGraph(
             state_schema=ImageProcessingState,
-            input_schema=InputImageState,
+            input_schema=ImageInputState,
             output_schema=ImageOutputState
         )
 
@@ -133,9 +133,6 @@ class ImageSubGraph(StateGraph):
 
         return builder.compile()
 
-    def run(self, state: InputImageState) -> ImageOutputState:
-        if not self.graph:
-            self.graph = self.build()
-
+    def run(self, state: ImageInputState) -> ImageOutputState:
         output_state = self.graph.invoke(state)
         return ImageOutputState(**output_state)

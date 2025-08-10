@@ -1,5 +1,6 @@
+import json
 from pathlib import Path
-from typing import Dict, Any, Optional
+from typing import Dict, Any, Optional, Union, List
 
 from src.models.global_state import GlobalInputState
 from src.models.base import QuestionType
@@ -25,3 +26,7 @@ def transform_raw_sample_to_input_state(
         input_image_path=input_image_path,
         article_ids=article_ids
     )
+
+def save_json(pred_file: Union[str, Path], results: Dict):
+    with open(pred_file, "w", encoding="utf-8") as f:
+        json.dump(results, f, indent=4, ensure_ascii=False)

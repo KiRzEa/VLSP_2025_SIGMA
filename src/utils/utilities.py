@@ -39,6 +39,9 @@ def resize_image(img: Image.Image, size: Tuple[int, int]) -> Image.Image:
 
 
 def encode_image_from_pil(img: Image.Image, format: str) -> str:
+    if format == "JPEG" and img.mode in ('P', 'RGBA', 'LA'):
+        img = img.convert("RGB")
+        
     buffered = BytesIO()
     img.save(buffered, format=format)
     return base64.b64encode(buffered.getvalue()).decode("utf-8")
@@ -64,6 +67,10 @@ def encode_image(image: Union[Image.Image, str], resize: bool = False, size: Tup
         img_format = img.format if img.format else "PNG"  # fallback
     else:
         raise ValueError("Input must be a file path or a PIL.Image.Image instance.")
+
+    # Convert to RGB if needed for JPEG format
+    if img_format == "JPEG" and img.mode in ('P', 'RGBA', 'LA'):
+        img = img.convert("RGB")
 
     if resize:
         img = img.resize(size)

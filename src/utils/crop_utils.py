@@ -29,6 +29,10 @@ def save_crop(cropped_img: Image.Image, save_path: str):
     """
     Lưu ảnh đã crop vào thư mục chỉ định
     """
+    # Convert to RGB if saving as JPEG and image has incompatible mode
+    if save_path.lower().endswith(('.jpg', '.jpeg')) and cropped_img.mode in ('P', 'RGBA', 'LA'):
+        cropped_img = cropped_img.convert("RGB")
+
     os.makedirs(os.path.dirname(save_path), exist_ok=True)
     cropped_img.save(save_path)
 

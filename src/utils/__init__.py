@@ -18,6 +18,6 @@ from src.utils.utilities import (
     format_sign_interpretation,
     format_processed_articles,
 )
-from src.utils.vlsp_utils import (
+from src.utils.submission_utils import (
     transform_raw_sample_to_input_state,
 )

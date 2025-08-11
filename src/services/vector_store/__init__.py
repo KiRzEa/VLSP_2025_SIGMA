@@ -1,1 +1,2 @@
-from src.services.vector_store.vector_store import MongoVectorStore
+from src.services.vector_store.mongodb_vector_store import MongoVectorStore
+from src.services.vector_store.elasticsearch_vector_store import ElasticVectorStore

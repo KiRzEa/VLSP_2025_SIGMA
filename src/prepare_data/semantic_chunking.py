@@ -1,5 +1,5 @@
 import re
-from typing import List, Dict
+from typing import List, Dict, Union
 
 from langchain_experimental.text_splitter import SemanticChunker
 from langchain_core.documents.base import Document
@@ -11,20 +11,31 @@ class LegalDocumentChunker:
     def __init__(self):
         self.text_splitter = SemanticChunker(E5TextEmbeddingModel().model)
 
-    def chunk(self, document: Dict) -> List[Dict]:
+    def chunk(
+        self, 
+        document: Dict, 
+        as_dict: bool = True
+    ) -> Union[List[Dict], List[Document]]:
         """
         Splits the document['text'] field into semantically meaningful chunks.
 
         Args:
             document (dict): A legal article with fields like 'text', 'law_id', etc.
+            as_dict (bool): If True, returns a list of dictionaries. 
+                            If False, returns a list of Document objects.
 
         Returns:
-            List[Dict]: List of chunks, each with metadata.
+            List[Dict] | List[Document]
         """
         document, metadata = format_article(document)
         chunks: List[Document] = self._semantic_split(document, metadata)
 
-        return [{('text' if k == 'page_content' else k): v for k, v in chunk.model_dump().items()} for chunk in chunks]
+        if as_dict:
+            return [
+                {("text" if k == "page_content" else k): v for k, v in chunk.model_dump().items()}
+                for chunk in chunks
+            ]
+        return chunks
 
     def _semantic_split(self, document: str, metadata: Dict) -> List[Document]:
         """

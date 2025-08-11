@@ -1,5 +1,6 @@
 from functools import lru_cache
 
+from src.models.base import VectorStoreType
 from src.services.knowledge_base_service import LawDatabase
 from src.services.llm_service import AzureChatModel, FPTChatModel
 from src.services.detection_service import DetectorPipeline
@@ -24,7 +25,10 @@ class Service:
 
         # Retriever
         # self.image_retriever = ImageRetriever()
-        self.text_retriever = TextRetriever()
+        # Task 1
+        self.elastic_text_retriever = TextRetriever(VectorStoreType.ELASTIC)
+        # Task 2
+        self.mongo_text_retriever = TextRetriever(VectorStoreType.MONGO)
 
         # Detector
         self.detector = DetectorPipeline()

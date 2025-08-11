@@ -19,6 +19,7 @@ langchain-openai==0.3.28
 langchain-azure-ai==0.1.4
 langchain-huggingface==0.3.1
 langchain-experimental==0.3.4
+langchain-elasticsearch==0.3.2
 transformers==4.53.3
 sentence-transformers==5.1.0
 scikit-learn==1.7.1

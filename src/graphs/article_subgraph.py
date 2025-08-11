@@ -25,8 +25,9 @@ from src.utils import (
 logger = setup_logger("ArticleAgent")
 
 class ArticleSubGraph(BaseGraph):
-    def __init__(self, service: Service = get_service()):
+    def __init__(self, service: Service = get_service(), retriever_config={"top_k": 5}):
         self.service = service
+        self.retriever_config = retriever_config
         self.graph = self.build()
 
     # --------------------
@@ -45,10 +46,10 @@ class ArticleSubGraph(BaseGraph):
         logger.debug(f"[retrieve_candidate_articles] Final query:\n{query_str}")
 
         # Call retriever
-        results = self.service.text_retriever.search(
+        results = self.service.mongo_text_retriever.search(
             query_str=query_str,
             candidate_ids=state.article_ids,
-            top_k=5
+            **self.retriever_config
         )
 
         # Map results to articles in state

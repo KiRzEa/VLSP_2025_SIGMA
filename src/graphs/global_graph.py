@@ -1,3 +1,5 @@
+from typing import Dict
+
 from langgraph.graph import StateGraph, END
 from langgraph.graph.state import CompiledStateGraph
 from langchain_core.messages import HumanMessage
@@ -25,10 +27,14 @@ from src.utils import (
 logger = setup_logger("GlobalGraph")
 
 class GlobalGraph(BaseGraph):
-    def __init__(self, service: Service = get_service()):
+    def __init__(self, 
+                service: Service = get_service(),
+                detector_config: Dict = {"top_k": 5, "min_area_ratio": 1e-2},
+                retriever_config: Dict = {"top_k": 10}
+    ):
         self.service = service
-        self.image_subgraph = ImageSubGraph(service)
-        self.article_subgraph = ArticleSubGraph(service)
+        self.image_subgraph = ImageSubGraph(service, detector_config)
+        self.article_subgraph = ArticleSubGraph(service, retriever_config)
 
         self.graph = self.build()
 

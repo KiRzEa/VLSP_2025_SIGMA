@@ -83,6 +83,12 @@ class ImageSubGraph(StateGraph):
         )
 
         parsed = extract_json_from_deepseek_response(response, return_json=True)
+
+        signs = parsed["individual_signs"]
+        for sign, bbox in zip(signs, state.sign_bboxes):
+            sign["detector_predicted_type"] = bbox["class"]
+        
+        parsed["individual_signs"] = signs
         state.sign_interpretation = parsed
 
         return state

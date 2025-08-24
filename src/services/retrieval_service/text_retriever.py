@@ -10,6 +10,7 @@ logger = setup_logger("Text Retriever")
 class TextRetriever(BaseRetriever):
     def __init__(self, vector_store_type: Literal["mongo", "elastic"]):
         self.vector_store_type = vector_store_type
+        self._init_vector_store()
 
     def _init_vector_store(self):
         if self.vector_store_type == "mongo":

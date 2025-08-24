@@ -55,13 +55,14 @@ class ImageSubGraph(StateGraph):
         logger.info(f"[analyze_query] Analyzing {len(state.detected_signs)} detected signs")
         sign_descs = []
 
-        for sign in state.detected_signs:
+        for sign, bbox in zip(state.detected_signs, state.sign_bboxes):
             response = self.service.gemma.generate(
                 user_prompt=SIGN_ATTRIBUTES_EXTRACTION_PROMPT,
                 image_paths=[sign]
             )
 
             desc = extract_json_from_deepseek_response(response, return_json=True)
+            desc[0]['sign_type'] = bbox['class']
             sign_descs.append(desc[0])
         
         state.sign_descriptions = sign_descs

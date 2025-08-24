@@ -33,23 +33,23 @@ def main():
     parser = ArgumentParser()
     parser.add_argument(
         "--mode", 
-        choices=["train", "test"], 
-        default="test", 
-        help="Choose whether to run in train or test mode"
+        choices=["train", "public_test", "private_test"], 
+        default="public_test", 
+        help="Choose whether to run in train, public_test, or private_test mode"
     )
     args = parser.parse_args()
 
     # File paths
-    data_file = Path(
-        "./data/train_data/vlsp_2025_train.json"
-        if args.mode == "train" else
-        "./data/public_test/vlsp_2025_public_test_task2.json"
-    )
-    image_root = Path(
-        "./data/train_data/train_images/train_images"
-        if args.mode == "train" else
-        "./data/public_test/public_test_images"
-    )
+    if args.mode == "train":
+        data_file = Path("./data/train_data/vlsp_2025_train.json")
+        image_root = Path("./data/train_data/train_images/train_images")
+    elif args.mode == "public_test":
+        data_file = Path("./data/public_test/vlsp_2025_public_test_task2.json")
+        image_root = Path("./data/public_test/public_test_images")
+    elif args.mode == "private_test":
+        data_file = Path("./data/private_test/vlsp_2025_private_test_task2.json")
+        image_root = Path("./data/private_test/private_test_images")
+        
     predictions_file = Path(f"./task2_{args.mode}_predictions.json")
     submission_file = Path(f"./submission_task2.json")
 

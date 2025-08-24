@@ -47,11 +47,11 @@ def main():
         data_file = Path("./data/public_test/vlsp_2025_public_test_task2.json")
         image_root = Path("./data/public_test/public_test_images")
     elif args.mode == "private_test":
-        data_file = Path("./data/private_test/vlsp_2025_private_test_task2.json")
+        data_file = Path("./data/private_test/vlsp2025_submission_task2.json")
         image_root = Path("./data/private_test/private_test_images")
-        
+
     predictions_file = Path(f"./task2_{args.mode}_predictions.json")
-    submission_file = Path(f"./submission_task2.json")
+    submission_file = Path(f"./{args.mode}_submission_task2.json")
 
     logger.info(f"Initialized Task-2 Runner in {args.mode.upper()} mode")
     logger.info(f"Data file: {data_file}")

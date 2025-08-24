@@ -29,7 +29,7 @@ logger = setup_logger("GlobalGraph")
 class GlobalGraph(BaseGraph):
     def __init__(self, 
                 service: Service = get_service(),
-                detector_config: Dict = {"top_k": 5, "min_area_ratio": 1e-2},
+                detector_config: Dict = {"top_k": 10, "min_area_ratio": 0.0},
                 retriever_config: Dict = {"top_k": 10}
     ):
         self.service = service

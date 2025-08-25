@@ -25,7 +25,8 @@ Dưới đây là các thông tin đã được trích xuất và xử lý:
 
 ### Yêu cầu:
 Dựa vào các thông tin trên, hãy trả lời câu hỏi một cách **ngắn gọn, chính xác** theo đúng định dạng bên dưới:
-- Trả lời dưới dạng JSON đúng định dạng sau, không viết thêm bất kỳ dòng nào khác ngoài JSON:
+- Chỉ trả lời **duy nhất** bằng JSON thuần, có thể phân tích bằng `json.loads()`.
+- Đảm bảo định dạng JSON thuần, không thêm văn bản, giải thích hoặc ký tự thừa như sau:
 
 ```json
 {{

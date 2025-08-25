@@ -26,7 +26,7 @@ class Service:
         # Retriever
         # self.image_retriever = ImageRetriever()
         # Task 1
-        self.elastic_text_retriever = TextRetriever(VectorStoreType.ELASTIC)
+        # self.elastic_text_retriever = TextRetriever(VectorStoreType.ELASTIC)
         # Task 2
         self.mongo_text_retriever = TextRetriever(VectorStoreType.MONGO)
 

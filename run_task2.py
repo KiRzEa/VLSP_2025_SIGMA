@@ -48,7 +48,7 @@ def main():
         image_root = Path("./data/public_test/public_test_images")
     elif args.mode == "private_test":
         data_file = Path("./data/private_test/vlsp2025_submission_task2.json")
-        image_root = Path("./data/private_test/private_test_images")
+        image_root = Path("./data/private_test/private_test_images_jpeg")
 
     predictions_file = Path(f"./task2_{args.mode}_predictions.json")
     submission_file = Path(f"./{args.mode}_submission_task2.json")

@@ -35,7 +35,7 @@ On the official evaluation, SIGMA achieved **72% accuracy in Subtask 2**, rankin
     pip install -r requirements.txt
     ```
 
-## Project Structure
+## 📂 Project Structure
     ```
     src/
     │── core/         # Core system (graphs, states, orchestration)

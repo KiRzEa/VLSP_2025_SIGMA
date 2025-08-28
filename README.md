@@ -16,8 +16,8 @@ On the official evaluation, SIGMA achieved **72% accuracy in Subtask 2**, rankin
 
 1. Clone this repository:
     ```bash
-    git clone <repo-url>
-    cd <repo-folder>
+    git clone https://github.com/KiRzEa/VLSP_2025_SIGMA.git
+    cd VLSP_2025_SIGMA
     ```
 2. Create a Python environment (Python 3.12.11 recommended):
 

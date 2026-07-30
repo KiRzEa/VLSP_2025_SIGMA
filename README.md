@@ -38,6 +38,10 @@ On the official evaluation, SIGMA achieved **72% accuracy in Subtask 2**, rankin
     pip install -r requirements.txt
     ```
 
+## 📊 Data
+
+The full VLSP 2025 MLQA-TSR dataset (traffic sign images, legal document DB, train/test splits) is not committed to this repo due to size — see the shared task organizers for the official release. A small illustrative subset (sample traffic sign images + a trimmed `law_db`) is included under [`sample/`](sample/) so you can see the expected data format without downloading the full corpus.
+
 ## 📂 Project Structure
     ```
     src/

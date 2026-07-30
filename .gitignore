@@ -4,3 +4,6 @@ __pycache__/
 .vscode
 *.pyc
 submissions/
+
+# Dataset (large, competition-provided — see README for source; sample/ has a small illustrative subset)
+data/

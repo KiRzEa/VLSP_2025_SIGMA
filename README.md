@@ -1,5 +1,8 @@
 # SIGMA: SIGn Multimodal Agents
 
+[![Paper](https://img.shields.io/badge/ACL%20Anthology-2025.vlsp--1.50-b31b1b)](https://aclanthology.org/2025.vlsp-1.50/)
+[![VLSP 2025](https://img.shields.io/badge/VLSP%202025-Top%205%20Finalist-blue)](https://aclanthology.org/2025.vlsp-1.50/)
+
 We present **SIGMA (SIGn Multimodal Agents)**, a system for **multimodal legal question answering** on Vietnamese traffic sign rules, developed for the **VLSP 2025 MLQA-TSR shared task**. The task requires combining **traffic sign images** and **legal documents** to answer **multiple-choice** or **yes/no questions**, demanding both accurate **visual interpretation** and **legal grounding**.  
 
 SIGMA adopts a **multi-agent architecture**:
@@ -58,15 +61,15 @@ The `--mode` argument specifies **which dataset to run inference on**:
 
 Run inference on the **training set**:
 ```bash
-python runtask2 --mode train
+python run_task2.py --mode train
 ```
 Run inference on the **public test set**:
 ```bash
-python runtask2 --mode public_test
+python run_task2.py --mode public_test
 ```
 Run inference on the **private test set**:
 ```bash
-python runtask2 --mode private_test
+python run_task2.py --mode private_test
 ```
 ### Output files
 For each mode, two files will be generated:
@@ -76,3 +79,30 @@ For each mode, two files will be generated:
 
 - Submission file → **[mode]_submission_task2.json**
 (stores the final submission format expected by the shared task)
+
+## 📄 Citation
+
+If you use this work, please cite:
+
+```bibtex
+@inproceedings{kiet-etal-2025-metamorphic,
+    title = "Metamorphic at {VLSP} 2025: {SIGMA} {--} A Multimodal Agent System for Legal {QA} on {V}ietnamese Traffic Signs",
+    author = "Kiet, Nguyen Tuan  and
+      Anh, Nguyen Khanh Tuan  and
+      Nguyen, Long Hoang Huu  and
+      Tai, Dam Vu Trong  and
+      Thin, Dang Van",
+    editor = "Mai, Luong Chi  and
+      Huyen, Nguyen Thi Minh  and
+      Trang, Nguyen Thi Thu",
+    booktitle = "Proceedings of the 11th International Workshop on Vietnamese Language and Speech Processing",
+    month = oct,
+    year = "2025",
+    address = "Hanoi, Vietnam",
+    publisher = "Association for Computational Linguistics",
+    url = "https://aclanthology.org/2025.vlsp-1.50/",
+    pages = "418--430"
+}
+```
+
+Paper: [aclanthology.org/2025.vlsp-1.50](https://aclanthology.org/2025.vlsp-1.50/)
